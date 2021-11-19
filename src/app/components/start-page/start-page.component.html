@@ -1,0 +1,44 @@
+
+<div class="container">
+
+
+  <h3>Владельцы автомобилей</h3>
+
+  <form class="m-3" (click)="btnClick($event)">
+    <button id="add" class="p-2 m-1 btn btn-primary">Добавить</button>
+    <button [disabled]="disabled" id="view" class="p-2 m-1 btn btn-info">Просмотр</button>
+    <button [disabled]="disabled" id="edit" class="p-2 m-1 btn btn-warning">Редактировать</button>
+    <button [disabled]="disabled" id="delete" class="p-2 m-1 btn btn-danger">Удалить</button>
+  </form>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Имя</th>
+      <th scope="col">Отчество</th>
+      <th scope="col">Количество автомобилей</th>
+    </tr>
+    </thead>
+    <tbody (click)="tableClick($event)">
+    <tr *ngFor="let owner of owners; let i = index" class="tableRow" id="{{owner.id}}" [ngClass]="activeRow == i ? 'active' : ''">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ owner.surname}}</td>
+      <td>{{ owner.name}}</td>
+      <td>{{ owner.patronymic}}</td>
+      <td>{{ owner.cars.length}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+
+ <div *ngIf="formData && this.showModal"  class="formWrap" (click)="closeModal($event)">
+   <app-form class="formPosition"  [formData]="formData" [status]="status" (submitEmit)="submitEmit($event)"></app-form>
+ </div>
+
+
+

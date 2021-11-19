@@ -1,0 +1,61 @@
+<div class="container modalWrapper">
+  <form [formGroup]="carsForm">
+    <div class="form-group">
+      <label for="surname">Фамилия</label>
+      <input [readOnly]="status == 'view'" type="email" class="form-control" id="surname" aria-describedby="emailHelp"
+             placeholder="surname" formControlName="surname">
+      <!--    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+    </div>
+    <div class="form-group">
+      <label for="name">Имя</label>
+      <input [readOnly]="status == 'view'" type="email" class="form-control" id="name" aria-describedby="emailHelp"
+             placeholder="name" formControlName="name">
+      <!--    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+    </div>
+    <div class="form-group">
+      <label for="patronymic">Отчество</label>
+      <input [readOnly]="status == 'view'" type="email" class="form-control" id="patronymic"
+             aria-describedby="emailHelp" placeholder="patronymic" formControlName="patronymic">
+      <!--    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+    </div>
+
+    <h3>Автомобили</h3>
+    <div formArrayName="cars" *ngFor="let car of t.controls; let i = index">
+      <div [formGroupName]="i" class="form-row">
+        <div class="col-md-3 mb-3">
+          <label for="validationServer01">Номер</label>
+          <input [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer01"
+                 placeholder="First name" value="Otto" formControlName="stateNumbers">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label for="validationServer02">Марка</label>
+          <input [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer02"
+                 placeholder="Last name" value="Otto" formControlName="manufacturer">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label for="validationServer03">Модель</label>
+          <input [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer03"
+                 placeholder="Last name" value="Otto" formControlName="model">
+        </div>
+        <div class="col-md-3 mb-3" [ngClass]="status=='edit' || status == 'add' && t.controls.length > 1 ? 'show_trash_btn': ''">
+          <div class="mr-2">
+            <label for="validationServer04">Год</label>
+            <input [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer04"
+                   placeholder="Last name" value="Otto" formControlName="year">
+          </div>
+          <div *ngIf="status == 'edit' || status == 'add' && t.controls.length > 1" class="btnBox">
+            <button (click)="deleteCar(i)" class="styleBtn"><img src="./../../../assets/Trash.png" alt="trash"></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+
+  <div *ngIf="status == 'edit' || status == 'add'">
+    <button (click)="save()">Сохранить</button>
+    <button (click)="oneMoreCars()">Добавить автомобиль</button>
+  </div>
+
+</div>

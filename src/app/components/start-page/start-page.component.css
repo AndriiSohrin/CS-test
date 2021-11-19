@@ -1,0 +1,33 @@
+
+.tableRow {
+  font-weight: 600;
+  transition: all .2s ease-out;
+}
+
+.tableRow:hover {
+  background: black;
+  color: aliceblue;
+  cursor: pointer;
+}
+
+.active {
+  background: aquamarine !important;
+}
+
+.formWrap{
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: fixed;
+  background: rgba(0,0,0,.75);
+  z-index: 3;
+}
+
+.formPosition {
+  position: absolute;
+  border: 1px solid black;
+  border-radius: 8px;
+  transform: translate(50%, 50%);
+  background: white !important;
+}

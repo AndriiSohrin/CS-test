@@ -1,16 +1,32 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
+import {HttpClientModule} from "@angular/common/http";
+import { FormComponent } from './components/form/form.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StartPageComponent } from './components/start-page/start-page.component';
+import {WebApiDBService} from "./services/web-api-db.service";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FormComponent,
+    StartPageComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    HttpClientInMemoryWebApiModule.forRoot(WebApiDBService),
+    FormsModule,
+    NgbModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
