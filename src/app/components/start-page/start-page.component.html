@@ -4,7 +4,7 @@
 
   <h3>Владельцы автомобилей</h3>
 
-  <form class="m-3" (click)="btnClick($event)">
+  <form  class="m-3" (click)="btnClick($event)">
     <button id="add" class="p-2 m-1 btn btn-primary">Добавить</button>
     <button [disabled]="disabled" id="view" class="p-2 m-1 btn btn-info">Просмотр</button>
     <button [disabled]="disabled" id="edit" class="p-2 m-1 btn btn-warning">Редактировать</button>
@@ -24,9 +24,9 @@
     <tbody (click)="tableClick($event)">
     <tr *ngFor="let owner of owners; let i = index" class="tableRow" id="{{owner.id}}" [ngClass]="activeRow == i ? 'active' : ''">
       <th scope="row">{{ i + 1 }}</th>
-      <td>{{ owner.surname}}</td>
-      <td>{{ owner.name}}</td>
-      <td>{{ owner.patronymic}}</td>
+      <td>{{ owner.lastName}}</td>
+      <td>{{ owner.firstName}}</td>
+      <td>{{ owner.secondName}}</td>
       <td>{{ owner.cars.length}}</td>
     </tr>
     </tbody>
@@ -37,7 +37,7 @@
 
 
  <div *ngIf="formData && this.showModal"  class="formWrap" (click)="closeModal($event)">
-   <app-form class="formPosition"  [formData]="formData" [status]="status" (submitEmit)="submitEmit($event)"></app-form>
+   <app-form class="formPosition"  [formData]="formData" [status]="status" (submitEmit)="submitEmit($event)" (backEmit)="showModal = false"></app-form>
  </div>
 
 

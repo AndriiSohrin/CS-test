@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CarOwnerService} from "../../services/car-owner.service";
 import {OwnerEntity} from "../../models/ownerEntity";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -8,7 +9,13 @@ import {OwnerEntity} from "../../models/ownerEntity";
   templateUrl: './start-page.component.html',
   styleUrls: ['./start-page.component.css']
 })
-export class StartPageComponent implements OnInit {
+export class StartPageComponent implements OnInit, OnDestroy {
+  getSub$!: Subscription;
+  createSub$!: Subscription;
+  editSub$!: Subscription;
+  deleteSub$!: Subscription;
+
+
   private url = 'api/owners/';
   disabled: boolean = true;
   activeRow!: number | null;
@@ -19,7 +26,7 @@ export class StartPageComponent implements OnInit {
   owners!: OwnerEntity[]
 
 
-  constructor(private productService: CarOwnerService) {
+  constructor(private carOwnerService: CarOwnerService) {
   }
 
   ngOnInit(): void {
@@ -27,42 +34,42 @@ export class StartPageComponent implements OnInit {
   }
 
   private getData() {
-    this.productService.get(this.url).subscribe((products: any) => {
+    this.getSub$ = this.carOwnerService.get(this.url).subscribe((products: any) => {
       this.owners = products
-      console.log(this.owners)
     });
   }
 
   create(data: any) {
-    this.productService.create(this.url, data).subscribe(response => {
-      console.log(response)
+    this.createSub$ = this.carOwnerService.create(this.url, data).subscribe(response => {
       this.getData();
       this.formData = undefined
+      console.log(response)
     });
   }
 
   update(data: any) {
-    if(this.activeRow){
+    if (this.activeRow) {
       data.id = this.owners[this.activeRow].id
     }
-    this.productService.edit(this.url, data).subscribe(response => console.log(response));
+    this.editSub$ = this.carOwnerService.edit(this.url, data).subscribe(response => console.log(response));
     this.getData()
     this.formData = undefined
   }
 
   resetValues() {
     return {
-      name: "",
+      firstName: "",
       id: null,
-      surname: "",
-      patronymic: "",
+      lastName: "",
+      secondName: "",
       cars: [
         {
           id: null,
           stateNumbers: '',
           manufacturer: '',
           model: '',
-          year: null
+          year: null,
+          ownerId: null
         }
       ]
     }
@@ -72,43 +79,43 @@ export class StartPageComponent implements OnInit {
 
   removeProduct(car: any) {
     const id = car.id;
-    this.productService.delete(this.url, id).subscribe(product => console.log(product));
+    this.deleteSub$ = this.carOwnerService.delete(this.url, id).subscribe(product => console.log(product));
     this.getData()
   }
 
 
   btnClick($event: any): void {
-    console.log($event.target.tagName == 'BUTTON')
     if (this.activeRow != null && $event.target.tagName == 'BUTTON') {
       this.formData = this.owners[this.activeRow]
     }
-      switch ($event.target.id) {
-        case 'add':
-          this.status = 'add'
-          this.showModal = true
-          this.formData = this.resetValues()
-          break
+    switch ($event.target.id) {
+      case 'add':
+        this.status = 'add'
+        this.showModal = true
+        this.formData = this.resetValues()
+        break
 
-        case 'edit':
-          this.status = 'edit'
-          this.showModal = true
-          break
+      case 'edit':
+        this.status = 'edit'
+        this.showModal = true
+        break
 
-        case 'view':
-          this.status = 'view'
-          this.showModal = true
-          break
+      case 'view':
+        this.status = 'view'
+        this.showModal = true
+        break
 
-        case 'delete':
-          if (this.activeRow != null) {
-            this.formData = undefined
-            this.removeProduct(this.owners[this.activeRow])
-          }
-          break
+      case 'delete':
+        if (this.activeRow != null) {
+          this.formData = undefined
 
-        default:
-          break
-      }
+          this.removeProduct(this.owners[this.activeRow])
+        }
+        break
+
+      default:
+        break
+    }
   }
 
   tableClick($event: any): void {
@@ -133,10 +140,28 @@ export class StartPageComponent implements OnInit {
   }
 
   closeModal(event: any) {
-    if(event.target.className.includes('formWrap')){
+    if (event.target.className.includes('formWrap')) {
       this.showModal = false
-    }else{
+    } else {
       return
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.getSub$) {
+      this.getSub$.unsubscribe()
+    }
+
+    if (this.createSub$) {
+      this.createSub$.unsubscribe()
+    }
+
+    if (this.editSub$) {
+      this.editSub$.unsubscribe()
+    }
+
+    if (this.deleteSub$) {
+      this.deleteSub$.unsubscribe()
     }
   }
 }

@@ -7,7 +7,7 @@
   border: none;
   cursor: pointer;
   border-radius: .25rem;
-  padding: 7px;
+  padding: 7px 10px;
 }
 
 img {
@@ -24,4 +24,14 @@ img {
 .show_trash_btn {
   display: flex;
   align-items: end;
+}
+
+small {
+  color: #d33242;
+  font-weight: bold;
+  text-align: right;
+}
+
+.errorBorder {
+  border-color: #d33242;
 }

@@ -3,5 +3,6 @@ export interface CarEntity {
   stateNumbers: string,
   manufacturer: string,
   model: string,
-  year: number | null
+  year: number | null,
+  ownerId: number | null
 }
