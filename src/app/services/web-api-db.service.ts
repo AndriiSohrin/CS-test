@@ -22,8 +22,8 @@ export class WebApiDBService implements InMemoryDbService {
               id: 0,
               stateNumbers: 'AO3312PE',
               manufacturer: 'ВАЗ',
-              model: '2102',
-              year: 1976,
+              model: '2101',
+              year: 1990,
               ownerId: 0
             },
           ]
@@ -37,19 +37,35 @@ export class WebApiDBService implements InMemoryDbService {
             {
               id: 0,
               stateNumbers: 'МС32215PE',
-              manufacturer: 'BMW',
-              model: 'X6',
-              year: 2011,
+              manufacturer: 'Зил',
+              model: '161',
+              year: 1995,
               ownerId: 1
+            },
+          ]
+        },
+        {
+          id: 2,
+          firstName: 'Олег',
+          lastName: 'Ляшко',
+          secondName: 'Валерійович',
+          cars: [
+            {
+              id: 0,
+              stateNumbers: 'МС69PE',
+              manufacturer: 'Україна',
+              model: 'вело',
+              year: 2001,
+              ownerId: 2
             },
             {
               id: 1,
-              stateNumbers: '66',
-              manufacturer: 'BMW',
-              model: 'X6',
-              year: 2011,
-              ownerId: 1
-            }
+              stateNumbers: 'ВК666АР',
+              manufacturer: 'Tesla',
+              model: 'Model S',
+              year: 2012,
+              ownerId: 2
+            },
           ]
         }
       ]

@@ -4,19 +4,19 @@
       <label for="lastName">Фамилия</label>
       <input [ngClass]="isValid(ownerControl.lastName, null) ? 'errorBorder': ''" [readOnly]="status == 'view'" type="text" class="form-control" id="lastName" aria-describedby="emailHelp"
              placeholder="Фамилия" formControlName="lastName">
-          <small *ngIf="isValid(ownerControl.lastName, null)" class="form-text">*обязательное поле</small>
+          <small *ngIf="isValid(ownerControl.lastName, null)" class="form-text"><i class="fas fa-star-of-life"></i></small>
     </div>
     <div class="form-group">
       <label for="firstName">Имя</label>
       <input [ngClass]="isValid(ownerControl.firstName, null) ? 'errorBorder': ''" [readOnly]="status == 'view'" type="text" class="form-control" id="firstName" aria-describedby="emailHelp"
              placeholder="Имя" formControlName="firstName">
-          <small *ngIf="isValid(ownerControl.firstName, null)"  class="form-text">*обязательное поле</small>
+          <small *ngIf="isValid(ownerControl.firstName, null)"  class="form-text"><i class="fas fa-star-of-life"></i></small>
     </div>
     <div class="form-group">
       <label for="secondName">Отчество</label>
       <input [ngClass]="isValid(ownerControl.secondName, null) ? 'errorBorder': ''" [readOnly]="status == 'view'" type="text" class="form-control" id="secondName"
              aria-describedby="emailHelp" placeholder="Отчество" formControlName="secondName">
-          <small *ngIf="isValid(ownerControl.secondName, null)" class="form-text">*обязательное поле</small>
+          <small *ngIf="isValid(ownerControl.secondName, null)" class="form-text"><i class="fas fa-star-of-life"></i></small>
     </div>
 
     <h3>Автомобили</h3>
@@ -25,10 +25,10 @@
         <div class="col-md-3 mb-3">
 
           <label *ngIf="i == 0" for="validationServer01">Номер</label>
-          <input [ngClass]="isValid(carsControl.controls[i], 'stateNumbers') || !checkUnique() ? 'errorBorder': ''" [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer01"
+          <input [ngClass]="isValid(carsControl.controls[i], 'stateNumbers') || isSubmit && !checkUniqueCurrent() ? 'errorBorder': ''" [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer01"
                  placeholder="Гос.Номер" value="Otto" formControlName="stateNumbers">
 
-           <small *ngIf="isValid(carsControl.controls[i], 'stateNumbers')" class="form-text">*обязательное поле</small>
+           <small *ngIf="isValid(carsControl.controls[i], 'stateNumbers') || isSubmit && !checkUniqueCurrent()" class="form-text"><i class="fas fa-star-of-life"></i></small>
         </div>
         <div class="col-md-3 mb-3">
 
@@ -36,7 +36,7 @@
           <input [ngClass]="isValid(carsControl.controls[i], 'manufacturer') ? 'errorBorder': ''" [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer02"
                  placeholder="Марка" value="Otto" formControlName="manufacturer">
 
-           <small *ngIf="isValid(carsControl.controls[i], 'manufacturer')" class="form-text">*обязательное поле</small>
+           <small *ngIf="isValid(carsControl.controls[i], 'manufacturer')" class="form-text"><i class="fas fa-star-of-life"></i></small>
         </div>
         <div class="col-md-3 mb-3">
 
@@ -44,7 +44,7 @@
           <input [ngClass]="isValid(carsControl.controls[i], 'model') ? 'errorBorder': ''" [readOnly]="status == 'view'" type="text" class="form-control" id="validationServer03"
                  placeholder="Модель" value="Otto" formControlName="model">
 
-           <small *ngIf="isValid(carsControl.controls[i], 'model')" class="form-text">*обязательное поле</small>
+           <small *ngIf="isValid(carsControl.controls[i], 'model')" class="form-text"><i class="fas fa-star-of-life"></i></small>
         </div>
         <div class="col-md-3 mb-3" [ngClass]="status=='edit' || status == 'add' && carsControl.controls.length > 1 ? 'show_trash_btn': ''">
           <div class="mr-2">
@@ -52,7 +52,7 @@
 
             <input [ngClass]="isValid(carsControl.controls[i], 'year') ? 'errorBorder': ''" [readOnly]="status == 'view'" type="number" class="form-control" id="validationServer04"
                    placeholder="Год" value="Otto" formControlName="year">
-             <small *ngIf="isValid(carsControl.controls[i], 'year')" class="form-text">*обязательное поле</small>
+             <small *ngIf="isValid(carsControl.controls[i], 'year')" class="form-text"><i class="fas fa-star-of-life"></i></small>
 
           </div>
           <div *ngIf="status == 'edit' || status == 'add' && carsControl.controls.length > 1" class="btnBox">
@@ -66,9 +66,9 @@
 
 
   <div>
-    <button *ngIf="status == 'edit' || status == 'add'" (click)="save()" class="btn btn-success m-2">Сохранить</button>
-    <button *ngIf="status == 'edit' || status == 'add' && carsControl.length < 3" (click)="oneMoreCars()" class="btn btn-info m-2">Добавить автомобиль</button>
-    <button (click)="back()" class="btn btn-dark m-2">Назад</button>
+    <button [disabled]="isSubmit && carsForm.invalid" *ngIf="status == 'edit' || status == 'add'" (click)="save()" class="btn btn-success m-2"><i class="far fa-save"></i> Сохранить</button>
+    <button *ngIf="status == 'edit' || status == 'add' && carsControl.length < 3" (click)="oneMoreCars()" class="btn btn-info m-2"><i class="fas fa-plus"></i> Добавить автомобиль</button>
+    <button (click)="back()" class="btn btn-dark m-2"><i class="fas fa-arrow-circle-left"></i> Назад</button>
   </div>
 
 </div>

@@ -6,7 +6,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import { FormComponent } from './components/form/form.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StartPageComponent } from './components/start-page/start-page.component';
 import {WebApiDBService} from "./services/web-api-db.service";
 
@@ -14,7 +13,7 @@ import {WebApiDBService} from "./services/web-api-db.service";
   declarations: [
     AppComponent,
     FormComponent,
-    StartPageComponent
+    StartPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +21,6 @@ import {WebApiDBService} from "./services/web-api-db.service";
     ReactiveFormsModule,
     HttpClientInMemoryWebApiModule.forRoot(WebApiDBService),
     FormsModule,
-    NgbModule,
 
   ],
   providers: [],

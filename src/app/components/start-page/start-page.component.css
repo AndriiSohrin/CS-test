@@ -5,13 +5,13 @@
 }
 
 .tableRow:hover {
-  background: black;
-  color: aliceblue;
+  background: grey;
   cursor: pointer;
 }
 
 .active {
-  background: aquamarine !important;
+  background: black  !important;
+  color: aliceblue;
 }
 
 .formWrap{
@@ -32,4 +32,10 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: white !important;
+}
+
+.boxShadow {
+  -webkit-box-shadow: 4px 4px 35px 0 rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 4px 4px 35px 0 rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 35px 0 rgba(34, 60, 80, 0.2);
 }

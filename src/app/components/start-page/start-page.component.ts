@@ -20,8 +20,8 @@ export class StartPageComponent implements OnInit, OnDestroy {
   disabled: boolean = true;
   activeRow!: number | null;
   formData: OwnerEntity | undefined;
-  status = '';
-  showModal = false
+  status: string = '';
+  showModal: boolean = false
 
   owners!: OwnerEntity[]
 
@@ -33,13 +33,13 @@ export class StartPageComponent implements OnInit, OnDestroy {
     this.getData()
   }
 
-  private getData() {
+  private getData(): void {
     this.getSub$ = this.carOwnerService.get(this.url).subscribe((products: any) => {
       this.owners = products
     });
   }
 
-  create(data: any) {
+  create(data: any): void {
     this.createSub$ = this.carOwnerService.create(this.url, data).subscribe(response => {
       this.getData();
       this.formData = undefined
@@ -47,7 +47,7 @@ export class StartPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  update(data: any) {
+  update(data: OwnerEntity): void {
     if (this.activeRow) {
       data.id = this.owners[this.activeRow].id
     }
@@ -56,7 +56,7 @@ export class StartPageComponent implements OnInit, OnDestroy {
     this.formData = undefined
   }
 
-  resetValues() {
+  resetValues(): OwnerEntity {
     return {
       firstName: "",
       id: null,
@@ -77,10 +77,12 @@ export class StartPageComponent implements OnInit, OnDestroy {
   }
 
 
-  removeProduct(car: any) {
-    const id = car.id;
-    this.deleteSub$ = this.carOwnerService.delete(this.url, id).subscribe(product => console.log(product));
-    this.getData()
+  removeProduct(car: OwnerEntity) {
+    if (car && car.id || car.id == 0) {
+      const id = car.id;
+      this.deleteSub$ = this.carOwnerService.delete(this.url, id).subscribe(product => console.log(product));
+      this.getData()
+    }
   }
 
 
@@ -108,7 +110,6 @@ export class StartPageComponent implements OnInit, OnDestroy {
       case 'delete':
         if (this.activeRow != null) {
           this.formData = undefined
-
           this.removeProduct(this.owners[this.activeRow])
         }
         break
@@ -124,22 +125,29 @@ export class StartPageComponent implements OnInit, OnDestroy {
     if (this.activeRow !== index) {
       this.activeRow = index
       this.disabled = false
+
     } else {
       this.activeRow = null
       this.disabled = true
     }
   }
 
-  submitEmit(data: any) {
+  submitEmit(data: OwnerEntity): void {
     if (this.status == 'add') {
       this.create(data)
     }
     if (this.status == 'edit') {
-      this.update(data)
+      if (!data.cars.length) {
+        this.removeProduct(data)
+        this.getData()
+        this.formData = undefined
+      } else {
+        this.update(data)
+      }
     }
   }
 
-  closeModal(event: any) {
+  closeModal(event: any): void {
     if (event.target.className.includes('formWrap')) {
       this.showModal = false
     } else {
@@ -147,7 +155,7 @@ export class StartPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.getSub$) {
       this.getSub$.unsubscribe()
     }
