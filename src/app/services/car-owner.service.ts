@@ -25,6 +25,8 @@ export class CarOwnerService {
   }
 
   create(url: string, product: any): Observable<OwnerEntity> {
+    console.log(product);
+    console.log(url)
     product.id = null;
     return this.http.post<any>(url, product).pipe(
       catchError((error: HttpErrorResponse) => {

@@ -30,8 +30,13 @@ small {
   color: #d33242;
   font-weight: bold;
   text-align: right;
+  line-height: 1;
 }
 
 .errorBorder {
-  border-color: #d33242;
+  border: 2px solid #d33242;
+}
+
+input.ng-invalid.ng-touched{
+  border: 2px solid #d33242 !important;
 }

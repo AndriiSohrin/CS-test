@@ -76,7 +76,6 @@ export class StartPageComponent implements OnInit, OnDestroy {
 
   }
 
-
   removeProduct(car: OwnerEntity) {
     if (car && car.id || car.id == 0) {
       const id = car.id;

@@ -31,6 +31,12 @@
       </tbody>
     </table>
 
+    <div *ngIf="!owners?.length" class="d-flex justify-content-center">
+      <div style="font-size: 22px;
+    margin: 16px;
+    font-weight: bold;">В базе нет ни одного владельца</div>
+    </div>
+
   </div>
 
   <div *ngIf="formData && this.showModal"  class="formWrap" (click)="closeModal($event)">

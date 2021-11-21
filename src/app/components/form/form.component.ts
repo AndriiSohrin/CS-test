@@ -19,8 +19,9 @@ export class FormComponent implements OnInit, OnDestroy {
   @Output() backEmit: EventEmitter<any> = new EventEmitter<boolean>()
 
   carsForm!: FormGroup;
-  carsQuantity: number = 1
-  isSubmit: boolean = false
+  carsQuantity: number = 1;
+  isSubmit: boolean = false;
+  errorIndex: number[] = []
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,9 +35,17 @@ export class FormComponent implements OnInit, OnDestroy {
   formInit(): void {
 
     this.carsForm = this.formBuilder.group({
-      firstName: [this.formData?.firstName, Validators.compose([Validators.required, Validators.maxLength(60)])],
-      lastName: [this.formData?.lastName, Validators.compose([Validators.required, Validators.maxLength(60)])],
-      secondName: [this.formData?.secondName, Validators.compose([Validators.required, Validators.maxLength(60)])],
+      firstName: [this.formData?.firstName, Validators.compose([
+        Validators.required,
+        Validators.maxLength(32),
+
+      ])],
+      lastName: [this.formData?.lastName, Validators.compose([
+        Validators.required,
+        Validators.maxLength(32)])],
+      secondName: [this.formData?.secondName, Validators.compose([
+        Validators.required,
+        Validators.maxLength(32)])],
       cars: new FormArray([]),
     })
 
@@ -46,10 +55,19 @@ export class FormComponent implements OnInit, OnDestroy {
 
         if (this.formData?.cars.length != 0) {
           this.carsControl.push(this.formBuilder.group({
-            stateNumbers: [this.formData?.cars[i].stateNumbers, Validators.compose([Validators.required])],
-            manufacturer: [this.formData?.cars[i].manufacturer, Validators.compose([Validators.required])],
-            model: [this.formData?.cars[i].model, Validators.compose([Validators.required])],
-            year: [this.formData?.cars[i].year, Validators.compose([Validators.required, Validators.maxLength(4), Validators.min(1990), Validators.max(new Date().getFullYear())])],
+            stateNumbers: [this.formData?.cars[i].stateNumbers, Validators.compose([
+              Validators.required,
+              Validators.maxLength(8),
+              Validators.pattern("^[A-Z]{2}(?!0{4})\\d{4}[A-Z]{2}$")])],
+            manufacturer: [this.formData?.cars[i].manufacturer, Validators.compose([
+              Validators.required,
+              Validators.maxLength(16)])],
+            model: [this.formData?.cars[i].model, Validators.compose([
+              Validators.required,
+              Validators.maxLength(16)])],
+            year: [this.formData?.cars[i].year, Validators.compose([
+              Validators.required, Validators.maxLength(4),
+              Validators.min(1990), Validators.max(new Date().getFullYear())])],
           }))
         }
 
@@ -67,10 +85,21 @@ export class FormComponent implements OnInit, OnDestroy {
 
   oneMoreCars(): void {
     this.carsControl.push(this.formBuilder.group({
-      stateNumbers: ['', Validators.compose([Validators.required, Validators.maxLength(30)])],
-      manufacturer: ['', Validators.compose([Validators.required, Validators.maxLength(30)])],
-      model: ['', Validators.compose([Validators.required, Validators.maxLength(30)])],
-      year: ['', Validators.compose([Validators.required, Validators.maxLength(4), Validators.min(1990), Validators.max(new Date().getFullYear())])],
+      stateNumbers: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(8),
+        Validators.pattern("^[A-Z]{2}(?!0{4})\\d{4}[A-Z]{2}$")])],
+      manufacturer: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(16)])],
+      model: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(16)])],
+      year: ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(4),
+        Validators.min(1990),
+        Validators.max(new Date().getFullYear())])],
     }));
     this.carsQuantity = this.carsQuantity + 1;
   }
@@ -79,7 +108,6 @@ export class FormComponent implements OnInit, OnDestroy {
     this.carsControl.removeAt(index);
     this.carsQuantity = this.carsQuantity - 1;
   }
-
 
 
   addAdditionalMarker(data: OwnerEntity[]) {
@@ -109,6 +137,7 @@ export class FormComponent implements OnInit, OnDestroy {
     }).flat()
 
     for (let i = 0; i < this.carsForm.value.cars.length; i++) {
+      this.carsForm.value.cars[i].index = i
       const datum = this.carsForm.value.cars[i];
 
       if (stateArr.findIndex((x: any) => {
@@ -118,28 +147,27 @@ export class FormComponent implements OnInit, OnDestroy {
         stateNumExist.push(datum)
       }
 
-      if (this.status == 'edit') {
-        stateNumExist = stateNumExist.filter((car: CarEntity) => {
-          return car.ownerId != this.formData?.id
-        })
-      }
+      stateNumExist = stateNumExist.filter((car: any) => {
+        return car.ownerId != this.formData?.id
+      })
 
+      this.errorIndex = stateNumExist.map((el: any) => {
+        return el.index
+      })
     }
     return stateNumExist
   }
 
   save(): void {
     this.isSubmit = true
+
     if (this.checkUniqueCurrent()) {
 
       this.getSub$ = this.carOwnerService.get('api/owners/').subscribe((data: any) => {
 
         this.addAdditionalMarker(data)
 
-        let busyNumbers = this.letsFindEqualCarNumbers(data)
-        console.log(busyNumbers)
-        //todo я тут маю масив з номерами якы уже э в базы
-        if (this.carsForm.status == 'VALID' && !busyNumbers.length) {
+        if (this.carsForm.status == 'VALID' && !this.letsFindEqualCarNumbers(data).length) {
 
           this.carsForm.value.id = this.formData?.id
           this.submitEmit.emit(this.carsForm.value)
@@ -152,11 +180,8 @@ export class FormComponent implements OnInit, OnDestroy {
     this.backEmit.next(true)
   }
 
-  isValid(controls: any, param: string | null) {
-    if (param) {
-      return this.isSubmit && controls.controls[param].status == 'INVALID'
-    }
-    return this.isSubmit && controls.status == 'INVALID'
+  compareIndex(i: number) {
+    return this.errorIndex.includes(i);
   }
 
   ngOnDestroy() {
